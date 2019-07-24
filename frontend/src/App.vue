@@ -36,11 +36,27 @@
             <v-toolbar-title>Application</v-toolbar-title>
             <v-spacer />
             <v-toolbar-items class="hidden-sm-and-down">
-                <v-btn v-if="isLogin" flat>
-                    Welcome
-                </v-btn>
+                <v-menu v-if="isLogin" offset-y>
+                    <v-btn
+                        slot="activator"
+                        dark
+                        flat>
+                        Logout
+                    </v-btn>
+                    <v-list-tile>
+                        <v-list-tile-title router :to="{name: 'mypage'}">
+                            Mypage
+                        </v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile>
+                        <v-list-tile-title
+                            @click="$store.dispatch('logout')">
+                            Logout
+                        </v-list-tile-title>
+                    </v-list-tile>
+                </v-menu>
                 <v-btn v-else router :to="{name: 'login'}" flat>
-                    Login
+                    Log in
                 </v-btn>
             </v-toolbar-items>
         </v-toolbar>
