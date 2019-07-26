@@ -21,6 +21,14 @@
                         <v-list-tile-title>Login</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+                <v-list-tile v-if="isLogin === false" router :to="{name: 'signup'}">
+                    <v-list-tile-action>
+                        <v-icon>contact_mail</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Signup</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
                 <v-list-tile v-else router :to="{name: 'mypage'}">
                     <v-list-tile-action>
                         <v-icon>contact_mail</v-icon>
@@ -40,24 +48,35 @@
                     <v-btn
                         slot="activator"
                         dark
+                        router
+                        :to="{name: 'mypage'}"
                         flat>
+                        Mypage
+                    </v-btn>
+                    <v-btn
+                        slot="activator"
+                        dark
+                        flat
+                        @click="$store.dispatch('logout')">
                         Logout
                     </v-btn>
-                    <v-list-tile>
-                        <v-list-tile-title router :to="{name: 'mypage'}">
-                            Mypage
-                        </v-list-tile-title>
-                    </v-list-tile>
-                    <v-list-tile>
-                        <v-list-tile-title
-                            @click="$store.dispatch('logout')">
-                            Logout
-                        </v-list-tile-title>
-                    </v-list-tile>
                 </v-menu>
-                <v-btn v-else router :to="{name: 'login'}" flat>
-                    Log in
-                </v-btn>
+                <v-menu v-else offset-y>
+                    <v-btn
+                        slot="activator"
+                        router
+                        :to="{name: 'login'}"
+                        flat>
+                        Login
+                    </v-btn>
+                    <v-btn
+                        slot="activator"
+                        router
+                        :to="{name: 'signup'}"
+                        flat>
+                        Signup
+                    </v-btn>
+                </v-menu>
             </v-toolbar-items>
         </v-toolbar>
         <v-content>

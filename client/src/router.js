@@ -38,6 +38,12 @@ export default new Router({
             component: () => import(/* webpackChunkName: "about" */ './views/Login.vue')
         },
         {
+            path: '/signup',
+            name: 'signup',
+            beforeEnter: rejectAuthUser,
+            component: () => import(/* webpackChunkName: "about" */ './views/Signup.vue')
+        },
+        {
             path: '/mypage',
             name: 'mypage',
             beforeEnter: onlyAuthUser,

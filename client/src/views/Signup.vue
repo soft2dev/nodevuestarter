@@ -16,26 +16,30 @@
                 </v-alert>
                 <v-card>
                     <v-toolbar flat>
-                        <v-toolbar-title>Login</v-toolbar-title>
+                        <v-toolbar-title>Signup</v-toolbar-title>
                     </v-toolbar>
                     <div class="pa-3">
                         <v-text-field
                             v-model="email"
-                            label="Please insert your email" />
+                            label="E-mail" />
                         <v-text-field
                             v-model="password"
                             type="password"
-                            label="Please insert your password" />
+                            label="Password" />
+                        <v-text-field
+                            v-model="repeatPassword"
+                            type="password"
+                            label="Repeat Password" />
                         <v-btn
                             color="primary"
                             depressed
                             block
                             large
-                            @click="login({
+                            @click="signup({
                                 email,
                                 password
                             })">
-                            Login
+                            Signup
                         </v-btn>
                     </div>
                 </v-card>
@@ -50,6 +54,7 @@ export default {
     data() {
         return {
             email: null,
+            repeatPassword: null,
             password: null
         }
     },
