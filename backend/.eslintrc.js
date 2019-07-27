@@ -3,7 +3,7 @@ module.exports = {
     "rules": {
         "indent": [
             "warn",
-            2
+            4
         ],
         "semi": [
             "error",
@@ -13,6 +13,17 @@ module.exports = {
         "eol-last": 0,
         "space-before-function-paren": 0,
         "no-trailing-spaces": 0,
-        "padded-blocks": 0
+        "padded-blocks": 0,
+        "no-trailing-spaces": 1,
+        "spaced-comment": 1,
+        "object-curly-spacing": [
+            "error", "always", 
+            { 
+                "objectsInObjects": false 
+            }
+        ],
+        "spaced-comment": [
+            "error", "always"
+        ]
     }
 };
