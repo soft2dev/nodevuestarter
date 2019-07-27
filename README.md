@@ -1,5 +1,5 @@
 
-## Vue-Node Starter
+# Vue-Node Starter
 
-# Vue.js Frontend
-# Koa.js Backend
+## Vue.js Frontend
+## Koa.js Backend

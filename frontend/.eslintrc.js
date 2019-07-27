@@ -1,7 +1,8 @@
 module.exports = {
     "extends": [
         "aqua/vue",
-        "aqua/node"
+        "aqua/node",
+        "@vue/typescript"
     ],
     "rules": {
         "vue/component-name-in-template-casing": "off",
@@ -39,7 +40,7 @@ module.exports = {
         ],
         "semi": [
             "error",
-            "always"
+            "never"
         ]        
     }
 };

@@ -50,6 +50,8 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import AuthenticationService from '@/services/AuthenticationService'
+
 export default {
     data() {
         return {
@@ -62,7 +64,11 @@ export default {
         ...mapState(['isLogin', 'isLoginError'])
     },
     methods: {
-        ...mapActions(['login'])
+        ...mapActions(['login']),
+        async signup(credentials) {
+            const res = await AuthenticationService.signup(credentials)
+            console.log(res)
+        }
     }
 }
 </script>
