@@ -9,8 +9,6 @@ function hash(passowrd) {
     return crypto.createHmac('sha256', secret).update(passowrd).digest('hex')
 }
 
-console.log(hash('1234'))
-
 const User = new Schema({
     displayName: String,
     email: String,
@@ -45,7 +43,7 @@ User.statics.findByEmail = function(email) {
     return this.findOne({ email }).exec()
 }
 
-User.statics.findByEmail = function(displayName) {
+User.statics.displayName = function(displayName) {
     return this.findOne({ displayName }).exec()
 }
 

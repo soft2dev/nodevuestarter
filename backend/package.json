@@ -17,7 +17,8 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.2.1",
     "moment": "^2.19.1",
-    "mongoose": "^5.6.7"
+    "mongoose": "^5.6.7",
+    "mongoose-double": "^0.0.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",

@@ -2,38 +2,27 @@ require('dotenv').config()
 const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
-const mongoose = require('mongoose')
 
 // load environment variables
 const {
-    PORT: port,
-    MONGO_URI: mongoURI
+    PORT: port
 } = process.env
 
-console.log('mongodbURI', mongoURI)
-// create app for koa
-const app = new Koa()
 const cors = require('@koa/cors')
 const router = new Router()
 
 // Router handler
 const api = require('./api')
+const db = require('./db')
+const jwtMiddleware = require('lib/middlewares/jwt')
 
-// MongoDB Configuration
-mongoose.promise = global.Promise
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true
-}).then(
-    () => {
-        console.log('Successfully connected to mongodb')
-    }
-).catch(e => {
-    console.log(e)
-})
+db.connect()
 
+// create app for koa
+const app = new Koa()
+app.use(jwtMiddleware)
 app.use(cors())
 app.use(bodyParser())
-
 app.use(router.routes())
 app.use(router.allowedMethods())
 

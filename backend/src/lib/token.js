@@ -16,4 +16,16 @@ function generateToken(payload, subject) {
     )
 }
 
+function decodeToken(token) {
+    return new Promise(
+        (resolve, reject) => {
+            jwt.verify(token, secret, (error, decode) => {
+                if (error) reject(error)
+                resolve(decode)
+            })
+        }
+    )
+}
+
 exports.generateToken = generateToken
+exports.decodeToken = decodeToken

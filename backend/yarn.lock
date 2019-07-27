@@ -1786,6 +1786,11 @@ mongodb@3.2.7:
     mongodb-core "3.2.7"
     safe-buffer "^5.1.2"
 
+mongoose-double@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-double/-/mongoose-double-0.0.1.tgz#c0be57852e7adc9cb9dcf9228b5cc6a9130a46ef"
+  integrity sha1-wL5XhS563Jy53Pkii1zGqRMKRu8=
+
 mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
