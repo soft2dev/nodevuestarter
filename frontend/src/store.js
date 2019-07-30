@@ -1,18 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from './router'
+import AuthenticationService from '@/services/AuthenticationService'
+import storage from '@/services/storage'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
         userInfo: null,
-        allUsers: [
-            { id: 1, name: 'soft2dev', email: 'sen.web@hotmail.com', password: '123' },
-            { id: 2, name: 'hoza', email: 'logo@gmail.com', password: '123' }
-        ],
         isLogin: false,
-        isLoginError: false
+        isLoginError: false,
+        errorMsg: null
     },
     mutations: {
         loginSuccess(state, payload) {
@@ -20,9 +19,10 @@ export default new Vuex.Store({
             state.isLoginError = false
             state.userInfo = payload
         },
-        loginError(state) {
+        loginError(state, payload) {
             state.isLogin = false
             state.isLoginError = true
+            state.errorMsg = payload
         },
         logout(state) {
             state.isLogin = false
@@ -31,22 +31,50 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        login({ state, commit }, loginObj) {
-            console.log(loginObj)
-            let selectedUser = null
-            state.allUsers.forEach(user => {
-                if (user.email === loginObj.email) selectedUser = user
-            })
-            if (selectedUser === null || selectedUser.password !== loginObj.password) {
-                commit('loginError')
-            } else {
-                commit('loginSuccess', selectedUser)
+        async login({ state, commit }, credentials) {
+            try {
+                const user = await AuthenticationService.login(credentials)
+                storage.set('__SITE_USER__', user.data)
+                commit('loginSuccess', user.data)
                 router.push({ name: 'mypage' })
+            } catch (error) {
+                commit('loginError', error.response.data.message)
             }
         },
-        logout({ commit }) {
+        async signup({ state, commit }, credentials) {
+            try {
+                const user = await AuthenticationService.signup(credentials)
+                storage.set('__SITE_USER__', user.data)
+                commit('loginSuccess', user.data)
+                router.push({ name: 'mypage' })
+            } catch (error) {
+                commit('loginError', error.response.data.message)
+            }
+        },
+        async checkLoginStatus({ state, commit }) {
+            const user = storage.get('__SITE_USER__')
+            if (user) {
+                commit('loginSuccess', user)
+            } else {
+                return false
+            }
+            try {
+                const checkedUser = await AuthenticationService.checkLoginStatus()
+
+                if (!checkedUser || (checkedUser && checkedUser._id !== state.userInfo._id)) {
+                    // if there is any change in login status, resave the user info
+                    storage.set('__SITE_USER__', state.userInfo)
+                }
+                return true
+            } catch (error) {
+                // if there is an error, removes the data from the storage
+                storage.remove('__SITE_USER__')
+            }
+        },
+        async logout({ commit }) {
+            await router.push({ name: 'home' })
+            storage.remove('__SITE_USER__')
             commit('logout')
-            router.push({ name: 'home' })
         }
     }
 })

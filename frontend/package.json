@@ -15,6 +15,7 @@
     "tslint": "^5.18.0",
     "typescript": "^3.5.3",
     "vue": "^2.6.10",
+    "vue-cookies": "^1.5.13",
     "vue-router": "^3.0.3",
     "vue-typescript": "^0.7.0",
     "vuetify": "^1.5.5",

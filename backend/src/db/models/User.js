@@ -24,26 +24,26 @@ const User = new Schema({
         github: {
             id: String,
             accessToken: String
-        },
-        password: String,
-        createdAt: {
-            type: Date,
-            default: Date.now
-        },
-        metaInfo: {
-            activated: {
-                type: Boolean,
-                default: false
-            }
+        }
+    },
+    password: String,
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    metaInfo: {
+        activated: {
+            type: Boolean,
+            default: false
         }
     }
 })
 
-User.statics.findByEmail = function(email) {
+User.statics.findByEmail = async function(email) {
     return this.findOne({ email }).exec()
 }
 
-User.statics.displayName = function(displayName) {
+User.statics.findBydisplayName = function(displayName) {
     return this.findOne({ displayName }).exec()
 }
 

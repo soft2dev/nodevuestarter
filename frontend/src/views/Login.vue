@@ -6,7 +6,7 @@
                     class="mb-3"
                     :value="isLoginError"
                     type="error">
-                    Please check again your email and password.
+                    {{ errorMsg }}
                 </v-alert>
                 <v-alert
                     class="mb-3"
@@ -21,20 +21,20 @@
                     <div class="pa-3">
                         <v-text-field
                             v-model="email"
-                            label="E-mail" />
+                            type="email"
+                            label="E-mail"
+                            required />
                         <v-text-field
                             v-model="password"
                             type="password"
-                            label="Password" />
+                            label="Password"
+                            @keyup.enter="login()" />
                         <v-btn
                             color="primary"
                             depressed
                             block
                             large
-                            @click="login({
-                                email,
-                                password
-                            })">
+                            @click="login()">
                             Login
                         </v-btn>
                     </div>
@@ -45,7 +45,8 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
+
 export default {
     data() {
         return {
@@ -54,10 +55,13 @@ export default {
         }
     },
     computed: {
-        ...mapState(['isLogin', 'isLoginError'])
+        ...mapState(['isLogin', 'isLoginError', 'errorMsg'])
     },
     methods: {
-        ...mapActions(['login'])
+        login() {
+            const { email, password } = this
+            this.$store.dispatch('login', { email, password })
+        }
     }
 }
 </script>

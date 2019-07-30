@@ -6,16 +6,15 @@ Vue.use(Router)
 
 const rejectAuthUser = (to, from, next) => {
     if (store.state.isLogin === true) {
-        alert('You are already logged in.')
         next('/')
     } else {
         next()
     }
 }
 
-const onlyAuthUser = (to, from, next) => {
+const onlyAuthUser = async (to, from, next) => {
+    store.dispatch('checkLoginStatus')
     if (store.state.isLogin === false) {
-        alert('Please login.')
         next('/')
     } else {
         next()

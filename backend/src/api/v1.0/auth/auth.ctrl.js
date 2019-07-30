@@ -9,13 +9,16 @@ exports.localRegister = async (ctx) => {
     const schema = Joi.object({
         displayName: Joi.string().regex(/^[a-zA-Z0-9]{3,12}$/).required(),
         email: Joi.string().email().required(),
-        password: Joi.string().min(6).max(30).required()
+        password: Joi.string().min(6).max(30)
     })
 
     const result = Joi.validate(body, schema)
 
     if (result.error) {
         ctx.status = 400
+        ctx.body = {
+            message: result.error.details[0].message
+        }
         return
     }
 
@@ -29,9 +32,9 @@ exports.localRegister = async (ctx) => {
 
         if (exists) {
             ctx.status = 409
-            const key = exists.email === email ? 'email' : 'displayName'
+            const message = exists.email === email ? 'E-mail Already in Use.' : 'Display Name Already in Use.'
             ctx.body = {
-                key
+                message
             }
             return
         }
@@ -41,15 +44,15 @@ exports.localRegister = async (ctx) => {
             email,
             password
         })
-        ctx.body = {
-            displayName,
-            _id: user._id
-        }
         const accessToken = await token.generateToken({
             _id: user._id,
             displayName
         }, 'user')
-
+        ctx.body = {
+            displayName,
+            _id: user._id,
+            access_token: accessToken
+        }
         // configure accessToken to httpOnly cookie
         ctx.cookies.set('access_token', accessToken, {
             httpOnly: true,
@@ -62,16 +65,17 @@ exports.localRegister = async (ctx) => {
 
 exports.localLogin = async (ctx) => {
     const { body } = ctx.request
-
     const schema = Joi.object({
         email: Joi.string().email().required(),
         password: Joi.string().min(6).max(30)
     })
 
     const result = Joi.validate(body, schema)
-
     if (result.error) {
         ctx.status = 400
+        ctx.body = {
+            message: 'The E-mail address or password is incorrect'
+        }
         return
     }
 
@@ -81,7 +85,10 @@ exports.localLogin = async (ctx) => {
         const user = await User.findByEmail(email)
         if (!user) {
             // User does not exist
-            ctx.status = 403
+            ctx.status = 400
+            ctx.body = {
+                message: 'The E-mail address or password is incorrect'
+            }
             return
         }
 
@@ -89,7 +96,10 @@ exports.localLogin = async (ctx) => {
         if (!validated) {
             // wrong password
             ctx.status = 403
-
+            ctx.body = {
+                message: 'The E-mail address or password is incorrect'
+            }
+            return
         }
 
         const accessToken = await user.generateToken()
@@ -103,7 +113,8 @@ exports.localLogin = async (ctx) => {
         ctx.body = {
             displayName,
             _id,
-            metaInfo
+            metaInfo,
+            access_token: accessToken
         }
     } catch (e) {
         ctx.throw(e)
@@ -112,9 +123,9 @@ exports.localLogin = async (ctx) => {
 
 exports.check = (ctx) => {
     const { user } = ctx.request
-
     if (!user) {
         ctx.status = 403
+        return
     }
     ctx.body = {
         user

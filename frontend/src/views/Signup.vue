@@ -6,11 +6,10 @@
                     class="mb-3"
                     :value="isLoginError"
                     type="error">
-                    Please check again your email and password.
+                    {{ errorMsg }}
                 </v-alert>
                 <v-alert
                     class="mb-3"
-                    :value="isLogin"
                     type="success">
                     Login is completed.
                 </v-alert>
@@ -20,25 +19,28 @@
                     </v-toolbar>
                     <div class="pa-3">
                         <v-text-field
+                            v-model="displayName"
+                            label="Display Name" />
+                        <v-text-field
                             v-model="email"
-                            label="E-mail" />
+                            type="email"
+                            label="E-mail"
+                            required />
                         <v-text-field
                             v-model="password"
-                            type="password"
+                            :type="passwordType"
                             label="Password" />
-                        <v-text-field
-                            v-model="repeatPassword"
-                            type="password"
-                            label="Repeat Password" />
+                        <v-checkbox
+                            v-if="password"
+                            v-model="checkPassowrd"
+                            label="Show Password"
+                            @change="showPassword" />
                         <v-btn
                             color="primary"
                             depressed
                             block
                             large
-                            @click="signup({
-                                email,
-                                password
-                            })">
+                            @click="signup()">
                             Signup
                         </v-btn>
                     </div>
@@ -50,24 +52,29 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
     data() {
         return {
+            displayName: null,
             email: null,
-            repeatPassword: null,
-            password: null
+            password: null,
+            passwordType: 'password',
+            checkPassowrd: false
         }
     },
     computed: {
-        ...mapState(['isLogin', 'isLoginError'])
+        ...mapState(['isLogin', 'isLoginError', 'errorMsg'])
     },
     methods: {
-        ...mapActions(['login']),
-        async signup(credentials) {
-            const res = await AuthenticationService.signup(credentials)
-            console.log(res)
+        async signup() {
+            const { displayName, email, password } = this
+            await this.$store.dispatch('signup', { displayName, email, password })
+        },
+        showPassword() {
+            this.checkPassowrd === true
+                ? this.passwordType = 'text'
+                : this.passwordType = 'password'
         }
     }
 }
